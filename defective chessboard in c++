@@ -1,0 +1,85 @@
+#include<iostream>
+using namespace std;
+int board[50][50],tile=1,i,j;
+void tiling_board(int trow,int tcol,int drow,int dcl,int size)
+{
+    if(size==1)
+    return;
+    int qsize=size/2;
+    int tiletouse=tile++;
+    //Top left quadrant
+    if(drow<=trow+qsize-1 && dcl<=tcol+qsize-1)
+    {
+        tiling_board(trow,tcol,drow,dcl,qsize);
+    }
+    else{
+        board[trow+qsize-1][tcol+qsize-1]=tiletouse;
+        tiling_board(trow,tcol,trow+qsize-1,tcol+qsize-1,qsize);
+    }
+    //top right quadrant
+    if(drow<=trow+qsize-1 && dcl>=tcol+qsize)
+    {
+        tiling_board(trow,tcol+qsize,drow,dcl,qsize);
+    }
+    else{
+        board[trow+qsize-1][tcol+qsize]=tiletouse;
+        tiling_board(trow,tcol+qsize,trow+qsize-1,tcol+qsize,qsize);
+    }
+    //bottom left quadrant
+    
+    if(drow>=trow+qsize && dcl<=tcol+qsize-1)
+    {
+        tiling_board(trow+qsize,tcol,drow,dcl,qsize);
+    }
+    else{
+        board[trow+qsize][tcol+qsize-1]=tiletouse;
+        tiling_board(trow+qsize,tcol,trow+qsize,tcol+qsize-1,qsize);
+    }
+    //bottom right quadrant
+    if(drow>=trow+qsize && dcl>=tcol+qsize)
+    {
+        tiling_board(trow+qsize,tcol+qsize,drow,dcl,qsize);
+    }
+    else{
+        board[trow+qsize][tcol+qsize]=tiletouse;
+        tiling_board(trow+qsize,tcol+qsize,trow+qsize,tcol+qsize,qsize);
+    }
+}
+int main()
+{
+    int size,drow,dcl;
+    cout<<"Enter the size of the chess board"<<endl;
+    cin>>size;
+    cout<<"Enter the row number and column number of defective square:\n";
+    cin>>drow>>dcl;
+    board[drow][dcl]=-1;
+    tiling_board(0,0,drow,dcl,size);
+    cout<<"The triominos required to tileup the chessboard is "<<tile<<endl;
+    cout<<"The defective square is represented by -1"<<endl;
+    cout<<"The chessboard after tiling is "<<endl;
+    for(i=0;i<size;i++)
+    {
+        for(j=0;j<size;j++)
+        {
+            cout<<board[i][j]<<"\t";
+        }
+        cout<<endl<<endl;
+    }
+    return 0;
+}
+
+output:
+Enter the size of the chess board
+4
+Enter the row number and column number of defective square:
+1 2
+The triominos required to tileup the chessboard is 6
+The defective square is represented by -1
+The chessboard after tiling is
+2       2       3       3
+
+2       1       -1      3
+
+4       1       1       5
+
+4       4       5       5
